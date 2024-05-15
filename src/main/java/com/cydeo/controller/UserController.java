@@ -23,11 +23,11 @@ public class UserController {
     }
 
     @GetMapping("/create")
-    public String createUser(Model model){
+    public String createUser(Model model) {
 
         model.addAttribute("user", new UserDTO());
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("users", userService.getAllUsers());
 
         return "/user/create";
 
@@ -38,8 +38,8 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("roles", roleService.findAll());
-            model.addAttribute("users", userService.findAll());
+            model.addAttribute("roles", roleService.getAllRoles());
+            model.addAttribute("users", userService.getAllUsers());
 
             return "/user/create";
 
@@ -54,9 +54,9 @@ public class UserController {
     @GetMapping("/update/{username}")
     public String editUser(@PathVariable("username") String username, Model model) {
 
-        model.addAttribute("user", userService.findById(username));
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("user", userService.findByUserName(username));
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("users", userService.getAllUsers());
 
         return "/user/update";
 
@@ -67,8 +67,8 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("roles", roleService.findAll());
-            model.addAttribute("users", userService.findAll());
+            model.addAttribute("roles", roleService.getAllRoles());
+            model.addAttribute("users", userService.getAllUsers());
 
             return "/user/update";
 
@@ -82,7 +82,7 @@ public class UserController {
 
     @GetMapping("/delete/{username}")
     public String deleteUser(@PathVariable("username") String username) {
-        userService.deleteById(username);
+        userService.deleteByUserName(username);
         return "redirect:/user/create";
     }
 
