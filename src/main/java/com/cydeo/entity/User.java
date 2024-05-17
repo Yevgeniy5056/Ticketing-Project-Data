@@ -4,6 +4,7 @@ import com.cydeo.enums.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 @Setter
 @NoArgsConstructor
 @Entity(name = "users")
+@Where(clause = "is_deleted=false")
 public class User extends BaseEntity {
 
     private String firstName;
