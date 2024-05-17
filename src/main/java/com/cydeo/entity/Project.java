@@ -29,6 +29,7 @@ public class Project extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private User assignedManager;
+    private Boolean isDeleted = false;
 
 
 }
