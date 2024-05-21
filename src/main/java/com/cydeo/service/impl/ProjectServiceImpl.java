@@ -64,7 +64,9 @@ public class ProjectServiceImpl implements ProjectService {
     public void delete(String code) {
 
         Project project = projectRepository.findByProjectCode(code);
+
         project.setIsDeleted(true);
+
         projectRepository.save(project);
 
     }
@@ -73,7 +75,9 @@ public class ProjectServiceImpl implements ProjectService {
     public void complete(String code) {
 
         Project project = projectRepository.findByProjectCode(code);
+
         project.setProjectStatus(Status.COMPLETE);
+
         projectRepository.save(project);
     }
 }
