@@ -52,7 +52,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(UserDTO userDTO) {
 
         User user = userMapper.convertToEntity(userDTO);
+
         user.setId(userRepository.findByUserName(userDTO.getUserName()).getId());
+
         userRepository.save(user);
 
         return findByUserName(user.getUserName());
@@ -62,7 +64,9 @@ public class UserServiceImpl implements UserService {
     public void delete(String username) {
 
         User user = userRepository.findByUserName(username);
+
         user.setIsDeleted(true);
+
         userRepository.save(user);
 
     }
