@@ -48,11 +48,13 @@ public class TaskServiceImpl implements TaskService {
         Task convertedTask = taskMapper.convertToEntity(taskDTO);
 
         if (task.isPresent()) {
+
             convertedTask.setTaskStatus(task.get().getTaskStatus());
 
             convertedTask.setAssignedDate(task.get().getAssignedDate());
 
             taskRepository.save(convertedTask);
+
         }
 
     }
