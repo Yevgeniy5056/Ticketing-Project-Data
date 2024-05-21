@@ -8,9 +8,9 @@ public interface TaskService {
 
     List<TaskDTO> getAllTasks();
 
-    void save(TaskDTO task);
+    void save(TaskDTO taskDTO);
 
-    void update(TaskDTO task);
+    void update(TaskDTO taskDTO);
 
     void delete(Long id);
 
