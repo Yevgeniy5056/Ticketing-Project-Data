@@ -2,6 +2,7 @@ package com.cydeo.service;
 
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.TaskDTO;
+import com.cydeo.enums.Status;
 
 import java.util.List;
 
@@ -24,4 +25,8 @@ public interface TaskService {
     void deleteByProject(ProjectDTO projectDTO);
 
     void completeByProject(ProjectDTO projectDTO);
+
+    List<TaskDTO> getAllTasksByStatusIsNot(Status status);
+
+    List<TaskDTO> getAllTasksByStatus(Status status);
 }

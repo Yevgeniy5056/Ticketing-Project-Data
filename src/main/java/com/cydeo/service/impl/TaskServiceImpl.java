@@ -2,13 +2,16 @@ package com.cydeo.service.impl;
 
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.TaskDTO;
+import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Project;
 import com.cydeo.entity.Task;
 import com.cydeo.enums.Status;
 import com.cydeo.mapper.ProjectMapper;
 import com.cydeo.mapper.TaskMapper;
+import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.TaskRepository;
 import com.cydeo.service.TaskService;
+import com.cydeo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
     private final ProjectMapper projectMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Override
     public List<TaskDTO> getAllTasks() {
@@ -118,4 +123,30 @@ public class TaskServiceImpl implements TaskService {
             update(taskDTO);
         });
     }
+
+    @Override
+    public List<TaskDTO> getAllTasksByStatusIsNot(Status status) {
+
+        UserDTO loggedInUser = userService.findByUserName("john@employee.com");
+
+        List<Task> tasks = taskRepository.
+                findAllByAssignedEmployeeAndTaskStatusIsNot(status, userMapper.convertToEntity(loggedInUser));
+
+        return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<TaskDTO> getAllTasksByStatus(Status status) {
+
+        UserDTO loggedInUser = userService.findByUserName("john@employee.com");
+
+        List<Task> tasks = taskRepository.
+                findAllByAssignedEmployeeAndTaskStatusIs(status, userMapper.convertToEntity(loggedInUser));
+
+        return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
+
+    }
+
+
 }
