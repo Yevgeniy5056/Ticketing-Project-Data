@@ -9,7 +9,7 @@ import com.cydeo.repository.UserRepository;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final ProjectService projectService;
     private final TaskService taskService;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper,
+                           @Lazy ProjectService projectService, @Lazy TaskService taskService) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.projectService = projectService;
+        this.taskService = taskService;
+    }
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -97,12 +104,14 @@ public class UserServiceImpl implements UserService {
 
                 List<ProjectDTO> projectDTOList =
                         projectService.getAllNonCompletedByAssignedManager(userMapper.convertToDto(user));
+
                 return projectDTOList.isEmpty();
 
             case "Employee":
 
                 List<TaskDTO> taskDTOList =
                         taskService.getAllNonCompletedByAssignedEmployee(userMapper.convertToDto(user));
+
                 return taskDTOList.isEmpty();
 
             default:
