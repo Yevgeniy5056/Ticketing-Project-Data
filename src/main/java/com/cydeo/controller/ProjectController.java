@@ -30,7 +30,7 @@ public class ProjectController {
 
         model.addAttribute("managers", userService.getAllByRole("manager"));
 
-        model.addAttribute("projects", projectService.getAllProjects());
+        model.addAttribute("projects", projectService.getAllProjectDetails());
 
         return "/project/create";
 
@@ -43,7 +43,7 @@ public class ProjectController {
 
             model.addAttribute("managers", userService.getAllByRole("manager"));
 
-            model.addAttribute("projects", projectService.getAllProjects());
+            model.addAttribute("projects", projectService.getAllProjectDetails());
 
             return "/project/create";
 
@@ -80,7 +80,7 @@ public class ProjectController {
 
         model.addAttribute("managers", userService.getAllByRole("manager"));
 
-        model.addAttribute("projects", projectService.getAllProjects());
+        model.addAttribute("projects", projectService.getAllProjectDetails());
 
         return "/project/update";
 
@@ -93,7 +93,7 @@ public class ProjectController {
 
             model.addAttribute("managers", userService.getAllByRole("manager"));
 
-            model.addAttribute("projects", projectService.getAllProjects());
+            model.addAttribute("projects", projectService.getAllProjectDetails());
 
             return "/project/update";
 
