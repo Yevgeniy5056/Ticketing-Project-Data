@@ -16,4 +16,7 @@ public interface TaskService {
 
     TaskDTO getById(Long id);
 
+    int totalNonCompletedTasks(String code);
+
+    int totalCompletedTasks(String code);
 }
