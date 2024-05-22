@@ -9,6 +9,7 @@ import com.cydeo.mapper.ProjectMapper;
 import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.ProjectRepository;
 import com.cydeo.service.ProjectService;
+import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,14 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectMapper projectMapper;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final TaskService taskService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.taskService = taskService;
     }
 
     @Override
@@ -104,8 +107,8 @@ public class ProjectServiceImpl implements ProjectService {
 
             ProjectDTO projectDTO = projectMapper.convertToDto(project);
 
-            projectDTO.setUnfinishedTaskCounts(3);
-            projectDTO.setCompleteTaskCounts(5);
+            projectDTO.setUnfinishedTaskCounts(taskService.totalNonCompletedTasks(project.getProjectCode()));
+            projectDTO.setCompleteTaskCounts(taskService.totalCompletedTasks(project.getProjectCode()));
 
             return projectDTO;
 
