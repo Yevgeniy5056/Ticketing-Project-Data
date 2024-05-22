@@ -30,8 +30,11 @@ public class TaskController {
     public String createTask(Model model) {
 
         model.addAttribute("task", new TaskDTO());
+
         model.addAttribute("projects", projectService.getAllProjects());
+
         model.addAttribute("employees", userService.getAllByRole("employee"));
+
         model.addAttribute("tasks", taskService.getAllTasks());
 
         return "/task/create";
@@ -44,7 +47,9 @@ public class TaskController {
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("projects", projectService.getAllProjects());
+
             model.addAttribute("employees", userService.getAllByRole("employee"));
+
             model.addAttribute("tasks", taskService.getAllTasks());
 
             return "/task/create";
@@ -70,8 +75,11 @@ public class TaskController {
     public String editTask(@PathVariable("taskId") Long taskId, Model model) {
 
         model.addAttribute("task", taskService.getById(taskId));
+
         model.addAttribute("projects", projectService.getAllProjects());
+
         model.addAttribute("employees", userService.getAllByRole("employee"));
+
         model.addAttribute("tasks", taskService.getAllTasks());
 
         return "/task/update";
@@ -95,7 +103,9 @@ public class TaskController {
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("projects", projectService.getAllProjects());
+
             model.addAttribute("employees", userService.getAllByRole("employees"));
+
             model.addAttribute("tasks", taskService.getAllTasks());
 
             return "/task/update";
@@ -110,14 +120,20 @@ public class TaskController {
 
     @GetMapping("/employee/pending-tasks")
     public String employeePendingTasks(Model model) {
+
         model.addAttribute("tasks", taskService.getAllTasksByStatusIsNot(Status.COMPLETE));
+
         return "/task/pending-tasks";
+
     }
 
     @GetMapping("/employee/archive")
     public String employeeArchivedTasks(Model model) {
+
         model.addAttribute("tasks", taskService.getAllTasksByStatus(Status.COMPLETE));
+
         return "/task/archive";
+
     }
 
 //    @GetMapping("/employee/edit/{id}")

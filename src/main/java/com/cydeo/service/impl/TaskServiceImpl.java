@@ -130,7 +130,7 @@ public class TaskServiceImpl implements TaskService {
         UserDTO loggedInUser = userService.findByUserName("john@employee.com");
 
         List<Task> tasks = taskRepository.
-                findAllByAssignedEmployeeAndTaskStatusIsNot(status, userMapper.convertToEntity(loggedInUser));
+                findAllByTaskStatusIsNotAndAndAssignedEmployee(status, userMapper.convertToEntity(loggedInUser));
 
         return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
 
@@ -142,7 +142,7 @@ public class TaskServiceImpl implements TaskService {
         UserDTO loggedInUser = userService.findByUserName("john@employee.com");
 
         List<Task> tasks = taskRepository.
-                findAllByAssignedEmployeeAndTaskStatusIs(status, userMapper.convertToEntity(loggedInUser));
+                findAllByTaskStatusAndAssignedEmployee(status, userMapper.convertToEntity(loggedInUser));
 
         return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
 
