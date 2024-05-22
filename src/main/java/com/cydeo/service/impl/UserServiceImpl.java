@@ -1,9 +1,13 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.ProjectDTO;
+import com.cydeo.dto.TaskDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.User;
 import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.UserRepository;
+import com.cydeo.service.ProjectService;
+import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -18,6 +22,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ProjectService projectService;
+    private final TaskService taskService;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -65,9 +71,13 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByUserName(username);
 
-        user.setIsDeleted(true);
+        if (checkIfUserCanBeDeleted(user)) {
 
-        userRepository.save(user);
+            user.setIsDeleted(true);
+
+            userRepository.save(user);
+
+        }
 
     }
 
@@ -76,6 +86,30 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findAllByRoleDescriptionIgnoreCase(role).stream()
                 .map(userMapper::convertToDto).collect(Collectors.toList());
+
+    }
+
+    private boolean checkIfUserCanBeDeleted(User user) {
+
+        switch (user.getRole().getDescription()) {
+
+            case "Manager":
+
+                List<ProjectDTO> projectDTOList =
+                        projectService.getAllNonCompletedByAssignedManager(userMapper.convertToDto(user));
+                return projectDTOList.isEmpty();
+
+            case "Employee":
+
+                List<TaskDTO> taskDTOList =
+                        taskService.getAllNonCompletedByAssignedEmployee(userMapper.convertToDto(user));
+                return taskDTOList.isEmpty();
+
+            default:
+
+                return true;
+
+        }
 
     }
 }
