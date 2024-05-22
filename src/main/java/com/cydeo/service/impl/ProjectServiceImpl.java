@@ -114,6 +114,7 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectDTO projectDTO = projectMapper.convertToDto(project);
 
             projectDTO.setUnfinishedTaskCounts(taskService.totalNonCompletedTasks(project.getProjectCode()));
+
             projectDTO.setCompleteTaskCounts(taskService.totalCompletedTasks(project.getProjectCode()));
 
             return projectDTO;
