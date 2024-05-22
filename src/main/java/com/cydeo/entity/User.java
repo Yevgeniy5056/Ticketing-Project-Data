@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -18,7 +15,10 @@ public class User extends BaseEntity {
 
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String userName;
+
     private String passWord;
     private boolean enabled;
     private String phone;
