@@ -4,13 +4,12 @@ import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.TaskDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.User;
-import com.cydeo.mapper.UserMapper;
+import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +19,14 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final MapperUtil mapperUtil;
     private final ProjectService projectService;
     private final TaskService taskService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper,
+    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil,
                            @Lazy ProjectService projectService, @Lazy TaskService taskService) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.mapperUtil = mapperUtil;
         this.projectService = projectService;
         this.taskService = taskService;
     }
@@ -36,21 +35,21 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
 
         return userRepository.findAllByIsDeletedOrderByFirstNameDesc(false).stream()
-                .map(userMapper::convertToDto).collect(Collectors.toList());
+                .map(user -> mapperUtil.convert(user, UserDTO.class)).collect(Collectors.toList());
 
     }
 
     @Override
     public UserDTO findByUserName(String username) {
 
-        return userMapper.convertToDto(userRepository.findByUserNameAndIsDeleted(username, false));
+        return mapperUtil.convert(userRepository.findByUserNameAndIsDeleted(username, false), UserDTO.class);
 
     }
 
     @Override
     public void save(UserDTO userDTO) {
 
-        userRepository.save(userMapper.convertToEntity(userDTO));
+        userRepository.save(mapperUtil.convert(userDTO, User.class));
 
     }
 
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByUserNameAndIsDeleted(userDTO.getUserName(), false);
 
-        User convertedUser = userMapper.convertToEntity(userDTO);
+        User convertedUser = mapperUtil.convert(userDTO, User.class);
 
         convertedUser.setId(user.getId());
 
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllByRole(String role) {
 
         return userRepository.findAllByRoleDescriptionIgnoreCaseAndIsDeleted(role, false).stream()
-                .map(userMapper::convertToDto).collect(Collectors.toList());
+                .map(user -> mapperUtil.convert(user, UserDTO.class)).collect(Collectors.toList());
 
     }
 
@@ -100,14 +99,14 @@ public class UserServiceImpl implements UserService {
             case "Manager":
 
                 List<ProjectDTO> projectDTOList =
-                        projectService.getAllNonCompletedByAssignedManager(userMapper.convertToDto(user));
+                        projectService.getAllNonCompletedByAssignedManager(mapperUtil.convert(user, UserDTO.class));
 
                 return projectDTOList.isEmpty();
 
             case "Employee":
 
                 List<TaskDTO> taskDTOList =
-                        taskService.getAllNonCompletedByAssignedEmployee(userMapper.convertToDto(user));
+                        taskService.getAllNonCompletedByAssignedEmployee(mapperUtil.convert(user, UserDTO.class));
 
                 return taskDTOList.isEmpty();
 
