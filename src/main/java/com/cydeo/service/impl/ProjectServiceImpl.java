@@ -6,8 +6,6 @@ import com.cydeo.entity.Project;
 import com.cydeo.entity.User;
 import com.cydeo.enums.Status;
 import com.cydeo.mapper.MapperUtil;
-import com.cydeo.mapper.ProjectMapper;
-import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.ProjectRepository;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.TaskService;
